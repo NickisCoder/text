@@ -7,6 +7,7 @@
 
 #include<stdio.h>
 #include<stdlib.h>
+#define MAXSIZE 7
 typedef struct node
 {
     int adjvex;
@@ -42,11 +43,48 @@ void CreatAdjlist(VertexNode g[],int e,int n)
         g[j].firstedge = p;
     }
 }
+
+int visited[MAXSIZE];
+void DFS (VertexNode g[],int i)
+{
+    EdgeNode *p;
+    p = (EdgeNode*)malloc(sizeof(EdgeNode));
+    printf("%4d",g[i].vertex);
+    visited[i]=1;
+    p=g[i].firstedge;
+
+    while (p!=NULL)
+    {
+        if (!visited[p->adjvex])
+           DFS( g,p->adjvex);
+        p= p->next;
+    }
+}
+
+void DFSTravers(VertexNode g[],int n)
+{
+    int i;
+    for (i=0;i<n;i++)
+      visited[i]=0;
+    for (i=0;i<n;i++)
+    {
+        if (!visited[i])
+        DFS(g,i);
+
+    }
+}
 int main()
 {
+    VertexNode g[MAXSIZE];
+    CreatAdjlist(g,6,5);
+    DFSTravers(g,5);
     return 0;
 }
 /* 这是图的链表存储方法需要注意：
  * 1.节点采用头插法。
  * 2.需要邻接表节点和顶点表节点
- * 3.这是无向图存储 */
+ * 3.这是无向图存储 
+ * 图的深度优先搜索：
+ * 用一个数组记录节点是否访问过
+ * 采用递归的方式进行深度优先搜索
+ * */
